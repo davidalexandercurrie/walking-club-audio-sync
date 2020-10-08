@@ -8,9 +8,24 @@ let startTime = Date.now() + 10000000000000;
 let socket;
 let playbackStarted = false;
 
+function onSoundLoadSuccess(e) {
+  console.log('load sound success', e);
+}
+function onSoundLoadError(e) {
+  console.log('load sound error', e);
+}
+function onSoundLoadProgress(e) {
+  console.log('load sound progress', e);
+}
+
 function preload() {
   for (let i = 0; i < 10; i++) {
-    sounds[i] = loadSound(`sounds/notes${i + 1}.ogg`);
+    sounds[i] = loadSound(
+      `sounds/notes${i + 1}.ogg`,
+      onSoundLoadSuccess,
+      onSoundLoadError,
+      onSoundLoadProgress
+    );
   }
 }
 
