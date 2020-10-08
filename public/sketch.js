@@ -19,6 +19,7 @@ function onSoundLoadProgress(e) {
 }
 
 function preload() {
+  soundFormats('mp3', 'ogg');
   for (let i = 0; i < 10; i++) {
     sounds[i] = loadSound(
       `sounds/notes${i + 1}.ogg`,
