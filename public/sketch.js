@@ -64,7 +64,7 @@ function draw() {
 }
 
 function buttonSelected(e) {
-  if (!playing) {
+  if (!playbackStarted) {
     for (let i = 0; i < buttons.length; i++) {
       if (i === e) {
         buttons[i].style('border: 10px solid #D90368');
