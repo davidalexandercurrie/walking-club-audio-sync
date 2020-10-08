@@ -48,7 +48,6 @@ function setup() {
 
 function draw() {
   if (listeningTo != undefined && !playing && Date.now() > startTime) {
-    playbackStarted = true;
     startTime = Date.now() + 10000000000000;
 
     sounds[listeningTo].play();
@@ -56,22 +55,23 @@ function draw() {
     playing = true;
     console.log('PLAYING');
   }
-  if (playbackStarted) {
+  if (playing) {
     if (!sounds[listeningTo].isPlaying() && playing) {
       playing = false;
-      playbackStarted = false;
       document.getElementById('playButton').style.border = '2px solid #2274A5';
     }
   }
 }
 
 function buttonSelected(e) {
-  for (let i = 0; i < buttons.length; i++) {
-    if (i === e) {
-      buttons[i].style('border: 10px solid #D90368');
-      listeningTo = i;
-    } else {
-      buttons[i].style('border: 2px solid #2274A5');
+  if (!playing) {
+    for (let i = 0; i < buttons.length; i++) {
+      if (i === e) {
+        buttons[i].style('border: 10px solid #D90368');
+        listeningTo = i;
+      } else {
+        buttons[i].style('border: 2px solid #2274A5');
+      }
     }
   }
 }
@@ -84,7 +84,7 @@ function receiveMsg(data) {
     if (previousSound != undefined) {
       sounds[previousSound].stop();
     }
-    playbackStarted = false;
+    playbackStarted = true;
     document.getElementById('playButton').style.border = '10px solid #03d90e';
     startTime = data.msg;
   }
@@ -95,6 +95,7 @@ function playClicked() {
     if (previousSound != undefined) {
       sounds[previousSound].stop();
     }
+    playbackStarted = true;
     document.getElementById('playButton').style.border = '10px solid #03d90e';
     startTime = Date.now() + 5000;
     sendMoment(startTime);
