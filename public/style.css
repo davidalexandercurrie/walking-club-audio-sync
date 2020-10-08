@@ -37,8 +37,9 @@ p {
   color: #d90368;
 }
 #p5_loading {
+  margin: 0 auto;
   width: 0;
-  font-size: 10vh;
+  font-size: 5vh;
   height: 10vh;
   background-color: #d90368;
   border: 2px solid pink;
