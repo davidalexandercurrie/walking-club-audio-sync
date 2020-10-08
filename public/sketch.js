@@ -12,18 +12,13 @@ let loadbar = 0;
 function onSoundLoadSuccess(e) {
   console.log('load sound success', e);
   loadbar += 10;
-  loadBar();
+  document.getElementById('p5_loading').style.width = loadbar.toString() + '%';
 }
 function onSoundLoadError(e) {
   console.log('load sound error', e);
 }
 function onSoundLoadProgress(e) {
-  // console.log('load sound progress', e);
-}
-
-function loadBar() {
-  let widthValue = loadbar.toString() + '%';
-  document.getElementById('p5_loading').style.width = 'widthValue';
+  console.log('load sound progress', e);
 }
 
 function preload() {
