@@ -97,10 +97,14 @@ function playClicked() {
   if (previousSound != undefined) {
     sounds[previousSound].stop();
   }
-  playbackStarted = true;
-  document.getElementById('playButton').style.border = '10px solid #03d90e';
-  startTime = Date.now() + 5000;
-  sendMoment(startTime);
+  if (listeningTo != undefined) {
+    playbackStarted = true;
+    document.getElementById('playButton').style.border = '10px solid #03d90e';
+    startTime = Date.now() + 5000;
+    sendMoment(startTime);
+  } else {
+    alert('No track selected');
+  }
 }
 function sendMoment(moment) {
   console.log('sending moment: ', moment);
