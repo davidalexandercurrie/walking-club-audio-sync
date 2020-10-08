@@ -37,10 +37,11 @@ p {
   color: #d90368;
 }
 #p5_loading {
-  margin: 0 auto;
+  margin: 2em auto;
   width: 0;
   font-size: 5vh;
   height: 10vh;
   background-color: #d90368;
   border: 2px solid pink;
+  transition: width 0.1s;
 }
