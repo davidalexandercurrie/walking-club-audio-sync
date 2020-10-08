@@ -62,6 +62,7 @@ function receiveMoment(time) {
   if (previousSound != undefined) {
     sounds[previousSound].stop();
   }
+  playbackStarted = false;
   document.getElementById('playButton').style.border = '5px solid #03d90e';
   startTime = time.moment;
 }
