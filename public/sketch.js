@@ -2,7 +2,7 @@ let sounds = [];
 let buttons = [];
 let listeningTo;
 let playing = false;
-let audioEnabled;
+let audioEnabled = false;
 let startTime = Date.now() + 10000000000000;
 let socket;
 let playbackStarted = false;
@@ -15,6 +15,7 @@ function preload() {
 }
 
 function setup() {
+  getAudioContext().suspend();
   noCanvas();
   for (let i = 0; i < sounds.length; i++) {
     buttons[i] = createButton(String(i + 1))
@@ -64,12 +65,13 @@ function receiveMoment(time) {
 }
 
 function playClicked() {
-  console.log('playClicked');
-  if (previousSound != undefined) {
-    sounds[previousSound].stop();
+  if (audioEnabled) {
+    if (previousSound != undefined) {
+      sounds[previousSound].stop();
+    }
+    startTime = Date.now() + 5000;
+    sendMoment(startTime);
   }
-  startTime = Date.now() + 5000;
-  sendMoment(startTime);
 }
 function sendMoment(moment) {
   console.log('sending moment: ', moment);
@@ -77,4 +79,8 @@ function sendMoment(moment) {
     moment: moment,
   };
   socket.emit('moment', data);
+}
+function enableAudio() {
+  userStartAudio();
+  audioEnabled = true;
 }
