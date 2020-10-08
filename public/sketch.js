@@ -41,6 +41,7 @@ function draw() {
     if (!sounds[listeningTo].isPlaying() && playing) {
       playing = false;
       playbackStarted = false;
+      document.getElementById('playButton').style.border = '2px solid #2274A5';
     }
   }
 }
@@ -61,6 +62,7 @@ function receiveMoment(time) {
   if (previousSound != undefined) {
     sounds[previousSound].stop();
   }
+  document.getElementById('playButton').style.border = '5px solid #03d90e';
   startTime = time.moment;
 }
 
@@ -69,6 +71,7 @@ function playClicked() {
     if (previousSound != undefined) {
       sounds[previousSound].stop();
     }
+    document.getElementById('playButton').style.border = '5px solid #03d90e';
     startTime = Date.now() + 5000;
     sendMoment(startTime);
   }
@@ -83,4 +86,5 @@ function sendMoment(moment) {
 function enableAudio() {
   userStartAudio();
   audioEnabled = true;
+  document.getElementById('enableAudio').style.border = '5px solid #D90368';
 }
