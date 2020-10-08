@@ -3,8 +3,8 @@ let buttons = [];
 let listeningTo;
 let previousSound;
 let playing = false;
-let audioEnabled = false;
 let startTime = Date.now() + 10000000000000;
+let audioEnabled = false;
 let socket;
 let playbackStarted = false;
 let loadbar = 0;
@@ -64,6 +64,9 @@ function draw() {
 }
 
 function buttonSelected(e) {
+  if (!audioEnabled) {
+    userStartAudio();
+  }
   if (!playbackStarted) {
     for (let i = 0; i < buttons.length; i++) {
       if (i === e) {
@@ -91,17 +94,13 @@ function receiveMsg(data) {
 }
 
 function playClicked() {
-  if (audioEnabled) {
-    if (previousSound != undefined) {
-      sounds[previousSound].stop();
-    }
-    playbackStarted = true;
-    document.getElementById('playButton').style.border = '10px solid #03d90e';
-    startTime = Date.now() + 5000;
-    sendMoment(startTime);
-  } else {
-    alert('enable audio first');
+  if (previousSound != undefined) {
+    sounds[previousSound].stop();
   }
+  playbackStarted = true;
+  document.getElementById('playButton').style.border = '10px solid #03d90e';
+  startTime = Date.now() + 5000;
+  sendMoment(startTime);
 }
 function sendMoment(moment) {
   console.log('sending moment: ', moment);
@@ -110,18 +109,7 @@ function sendMoment(moment) {
   };
   socket.emit('msg', data);
 }
-function enableAudio() {
-  if (!audioEnabled) {
-    userStartAudio();
-    audioEnabled = true;
-    document.getElementById('enableAudio').style.border = '10px solid #D90368';
-    document.getElementById('enableAudio').style.textDecoration = 'none';
-  } else {
-    document.getElementById('enableAudio').style.textDecoration =
-      'line-through';
-    audioEnabled = false;
-  }
-}
+
 function receiveResetMsg() {
   console.log('receiveReset');
   reset();
@@ -137,7 +125,6 @@ function resetClicked() {
 
 function reset() {
   console.log('hello');
-  buttonSelected(-1);
   startTime = Date.now() + 10000000000000;
   playing = false;
   playbackStarted = false;
