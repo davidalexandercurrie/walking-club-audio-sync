@@ -19,5 +19,15 @@ button {
   border: 2px solid #2274a5;
 }
 h1 {
+  text-align: left;
   font-size: 10vw;
+  margin: 0;
+}
+p {
+  font-size: 4vw;
+}
+#instructions {
+  text-align: left;
+  padding: 2em;
+  margin-top: 0;
 }
