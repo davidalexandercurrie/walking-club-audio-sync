@@ -22,7 +22,7 @@ function preload() {
   soundFormats('ogg');
   for (let i = 0; i < 10; i++) {
     sounds[i] = loadSound(
-      `sounds/note${i + 1}.ogg`,
+      `sounds/track${i + 1}.ogg`,
       onSoundLoadSuccess,
       onSoundLoadError,
       onSoundLoadProgress
