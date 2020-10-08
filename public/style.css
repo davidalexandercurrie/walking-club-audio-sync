@@ -45,3 +45,6 @@ p {
   border: 2px solid pink;
   transition: width 0.1s;
 }
+#enableAudio {
+  text-decoration: line-through;
+}

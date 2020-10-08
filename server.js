@@ -17,7 +17,11 @@ http.listen(process.env.PORT || 3000, process.env.IP, () => {
 });
 
 io.sockets.on('connection', socket => {
-  socket.on('moment', data => {
-    socket.broadcast.emit('moment', data);
+  socket.on('msg', data => {
+    if (data == 'reset') {
+      socket.broadcast.emit('msg', data);
+    } else {
+      socket.broadcast.emit('msg', data);
+    }
   });
 });

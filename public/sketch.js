@@ -10,15 +10,15 @@ let playbackStarted = false;
 let loadbar = 0;
 
 function onSoundLoadSuccess(e) {
-  console.log('load sound success', e);
+  // console.log('load sound success', e);
   loadbar += 10;
   document.getElementById('p5_loading').style.width = loadbar.toString() + '%';
 }
 function onSoundLoadError(e) {
-  console.log('load sound error', e);
+  // console.log('load sound error', e);
 }
 function onSoundLoadProgress(e) {
-  console.log('load sound progress', e);
+  // console.log('load sound progress', e);
 }
 
 function preload() {
@@ -43,7 +43,7 @@ function setup() {
       .mousePressed(() => buttonSelected(i));
   }
   socket = io.connect();
-  socket.on('moment', receiveMoment);
+  socket.on('msg', receiveMsg);
 }
 
 function draw() {
@@ -76,14 +76,18 @@ function buttonSelected(e) {
   }
 }
 
-function receiveMoment(time) {
-  console.log('receiving moment', time.moment);
-  if (previousSound != undefined) {
-    sounds[previousSound].stop();
+function receiveMsg(data) {
+  console.log('data', data);
+  if (data.msg == 'reset') {
+    reset();
+  } else {
+    if (previousSound != undefined) {
+      sounds[previousSound].stop();
+    }
+    playbackStarted = false;
+    document.getElementById('playButton').style.border = '10px solid #03d90e';
+    startTime = data.msg;
   }
-  playbackStarted = false;
-  document.getElementById('playButton').style.border = '10px solid #03d90e';
-  startTime = time.moment;
 }
 
 function playClicked() {
@@ -101,12 +105,42 @@ function playClicked() {
 function sendMoment(moment) {
   console.log('sending moment: ', moment);
   var data = {
-    moment: moment,
+    msg: moment,
   };
-  socket.emit('moment', data);
+  socket.emit('msg', data);
 }
 function enableAudio() {
-  userStartAudio();
-  audioEnabled = true;
-  document.getElementById('enableAudio').style.border = '10px solid #D90368';
+  if (!audioEnabled) {
+    userStartAudio();
+    audioEnabled = true;
+    document.getElementById('enableAudio').style.border = '10px solid #D90368';
+    document.getElementById('enableAudio').style.textDecoration = 'none';
+  } else {
+    document.getElementById('enableAudio').style.textDecoration =
+      'line-through';
+    audioEnabled = false;
+  }
+}
+function receiveResetMsg() {
+  console.log('receiveReset');
+  reset();
+}
+
+function resetClicked() {
+  reset();
+  var data = {
+    msg: 'reset',
+  };
+  socket.emit('msg', data);
+}
+
+function reset() {
+  console.log('hello');
+  buttonSelected(-1);
+  startTime = Date.now() + 10000000000000;
+  playing = false;
+  playbackStarted = false;
+  sounds[listeningTo].stop();
+  console.log('resetting all devices');
+  document.getElementById('playButton').style.border = '2px solid #2274A5';
 }
