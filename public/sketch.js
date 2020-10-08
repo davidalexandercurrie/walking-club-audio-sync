@@ -1,12 +1,12 @@
 let sounds = [];
 let buttons = [];
 let listeningTo;
+let previousSound;
 let playing = false;
 let audioEnabled = false;
 let startTime = Date.now() + 10000000000000;
 let socket;
 let playbackStarted = false;
-let previousSound;
 
 function preload() {
   for (let i = 0; i < 10; i++) {
