@@ -10,7 +10,7 @@ let previousSound;
 
 function preload() {
   for (let i = 0; i < 10; i++) {
-    sounds[i] = loadSound(`sounds/notes${i + 1}.mp3`);
+    sounds[i] = loadSound(`sounds/notes${i + 1}.ogg`);
   }
 }
 
