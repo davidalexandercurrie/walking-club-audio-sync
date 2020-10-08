@@ -94,6 +94,8 @@ function playClicked() {
     document.getElementById('playButton').style.border = '10px solid #03d90e';
     startTime = Date.now() + 5000;
     sendMoment(startTime);
+  } else {
+    alert('enable audio first');
   }
 }
 function sendMoment(moment) {
