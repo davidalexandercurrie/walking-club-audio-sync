@@ -8,6 +8,9 @@ let audioEnabled = false;
 let socket;
 let playbackStarted = false;
 let loadbar = 0;
+let trackIsSelected = false;
+let playButton;
+let resetButton;
 
 function onSoundLoadSuccess(e) {
   // console.log('load sound success', e);
@@ -36,6 +39,11 @@ function preload() {
 function setup() {
   getAudioContext().suspend();
   noCanvas();
+  playButton = createButton('play').parent('buttonList');
+  playButton.mousePressed(playClicked);
+  resetButton = createButton('reset all devices').parent('buttonList');
+  resetButton.mousePressed(resetClicked);
+
   for (let i = 0; i < sounds.length; i++) {
     buttons[i] = createButton(String(i + 1))
       .addClass('buttonList')
@@ -45,25 +53,34 @@ function setup() {
   socket = io.connect();
   socket.on('msg', receiveMsg);
 }
+setInterval(runProgram, 0.1);
+function runProgram() {
+  program();
+  if (playing) {
+    document.getElementById('instructions').style.backgroundColor = 'black';
+  } else {
+    document.getElementById('instructions').style.backgroundColor = 'white';
+  }
+}
 
-function draw() {
+function program() {
   if (listeningTo != undefined && !playing && Date.now() > startTime) {
     startTime = Date.now() + 10000000000000;
 
     sounds[listeningTo].play();
     previousSound = listeningTo;
     playing = true;
-    console.log('PLAYING');
   }
   if (playing) {
     if (!sounds[listeningTo].isPlaying() && playing) {
       playing = false;
-      document.getElementById('playButton').style.border = '2px solid #2274A5';
+      playButton.style('border: 2px solid #2274A5');
     }
   }
 }
 
 function buttonSelected(e) {
+  trackIsSelected = true;
   if (!audioEnabled) {
     userStartAudio();
   }
@@ -79,6 +96,17 @@ function buttonSelected(e) {
   }
 }
 
+function playClicked() {
+  console.log('play is clicked');
+  if (!trackIsSelected) {
+    alert('No track selected');
+  }
+  playbackStarted = true;
+  playButton.style('border: 10px solid #03d90e');
+  startTime = Date.now() + 5000;
+  sendMoment(startTime);
+}
+
 function receiveMsg(data) {
   console.log('data', data);
   if (data.msg == 'reset') {
@@ -88,24 +116,11 @@ function receiveMsg(data) {
       sounds[previousSound].stop();
     }
     playbackStarted = true;
-    document.getElementById('playButton').style.border = '10px solid #03d90e';
+    playButton.style('border: 10px solid #03d90e');
     startTime = data.msg;
   }
 }
 
-function playClicked() {
-  if (previousSound != undefined) {
-    sounds[previousSound].stop();
-  }
-  if (listeningTo != undefined) {
-    playbackStarted = true;
-    document.getElementById('playButton').style.border = '10px solid #03d90e';
-    startTime = Date.now() + 5000;
-    sendMoment(startTime);
-  } else {
-    alert('No track selected');
-  }
-}
 function sendMoment(moment) {
   console.log('sending moment: ', moment);
   var data = {
@@ -128,11 +143,10 @@ function resetClicked() {
 }
 
 function reset() {
-  console.log('hello');
   startTime = Date.now() + 10000000000000;
   playing = false;
   playbackStarted = false;
   sounds[listeningTo].stop();
   console.log('resetting all devices');
-  document.getElementById('playButton').style.border = '2px solid #2274A5';
+  playButton.style('border: 2px solid #2274A5');
 }
